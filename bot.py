@@ -1,22 +1,20 @@
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
+from chatterbot.comparisons import SynsetDistance
 Zeroni = ChatBot(
     "Zeroni",
-    logic_adapter=[
-        'chatterbot.logic.BestMatch'
-    ],
-    database_uri='sqlite:///database.sqlite3'
+    database_uri='sqlite:///database.sqlite3',
+    logic_adapters=[{
+        'import_path': 'chatterbot.logic.BestMatch',
+        'statement_comparison_function': SynsetDistance
+    }]
 )
 trainer = ListTrainer(Zeroni)
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is bleeding''',
-    '''Is it severe?''',
-    '''Yes''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''Yes''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''He's a child he is bleeding and is conscious''',
     '''Call 911, then follow these steps:
 
     Lay your child down with the feet elevated about 6 inches
@@ -29,12 +27,8 @@ trainer.train([
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is bleeding''',
-    '''Is it severe?''',
-    '''Yes''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''No''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''he's a child is bleeding and is unconscious''',
     '''Follow these steps, call 911 if you can't stop the bleeding within ten minutes by pressing on it with a clean cloth:
 
     Lay your child down with the feet elevated about 6 inches
@@ -49,10 +43,8 @@ trainer.train([
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    "Don't worry I'm here to help you, what is his emergency?",
-    '''he is bleeding''',
-    '''Is it severe?''',
-    '''No''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''He's child is conscious and is cut''',
     '''Follow these steps, call 911 if you can't stop the bleeding within ten minutes by pressing on it with a clean cloth:
 
     Apply direct pressure with a clean bandage or towel until the bleeding stops
@@ -77,10 +69,8 @@ trainer.train([
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he was poisoned''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''Yes''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''he's a child is unconscious and was poisoned''',
     '''Call 911, then follow these steps:
 
    Get the rest of whatever was swallowed away from your baby
@@ -93,12 +83,8 @@ trainer.train([
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he was poisoned''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''No''',
-    '''Is your kid having convulsions, turning blue around the mouth, or has burns on the lips or mouth?''',
-    '''Yes''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''he is a child was poisoned is conscious but is having convulsions. turning blue burns on the lips''',
     '''Call 911, then follow these steps:
 
     Get the rest of whatever was swallowed away from your baby
@@ -111,12 +97,8 @@ trainer.train([
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he was poisoned''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''No''',
-    '''Is your kid having convulsions, turning blue around the mouth, or has burns on the lips or mouth?''',
-    '''No''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''he is a child and was poisoned he is conscious''',
     '''That means it is not as severe, follow these steps:
 
     Get the rest of whatever was swallowed away from your baby
@@ -129,137 +111,23 @@ trainer.train([
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''drank a chemical''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''Yes''',
-    '''Call 911, then follow these steps:
-
-   Get the rest of whatever was swallowed away from your baby
-    Do not try to make your baby vomit
-    Try to make your baby spit out anything left in the mouth
-    Keep a sample – unless you have the container
-    Call Poison Control (800-222-1222), which can assess the situation and tell you what to do
-    ''',
-])
-trainer.train([
-    "Is your child breathing?",
-    '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''drank a chemical''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''No''',
-    '''Is your kid having convulsions, turning blue around the mouth, or has burns on the lips or mouth?''',
-    '''Yes''',
-    '''Call 911, then follow these steps:
-
-    Get the rest of whatever was swallowed away from your baby
-    Do not try to make your baby vomit
-    Try to make your baby spit out anything left in the mouth
-    Keep a sample – unless you have the container
-    Call Poison Control (800-222-1222), which can assess the situation and tell you what to do
-    ''',
-])
-trainer.train([
-    "Is your child breathing?",
-    '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''drank a chemical''',
-    '''Has your kid lost consciousness, is unresponsive, or is breathing irregularly?''',
-    '''No''',
-    '''Is your kid having convulsions, turning blue around the mouth, or has burns on the lips or mouth?''',
-    '''No''',
-    '''That means it is not as severe, follow these steps:
-
-    Get the rest of whatever was swallowed away from your baby
-    Do not try to make your baby vomit
-    Try to make your baby spit out anything left in the mouth
-    Keep a sample – unless you have the container
-    Call Poison Control (800-222-1222), which can assess the situation and tell you what to do
-    ''',
-])
-trainer.train([
-    "Is your child breathing?",
-    '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is vomiting''',
-    '''Is your child responsive?''',
-    '''no''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''he is a child is vomiting and is unconscious''',
     '''Call 911
     ''',
 ])
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is vomiting''',
-    '''Is your child responsive?''',
-    '''yes''',
-    '''Does your kid present inconsolable crying, alternately pulling in and extending legs, arching back in pain?''',
-    '''yes''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''he is a child he is vomiting and he is arching his back vomit looks green or red has swollen abdomen strted vomiting after head injury''',
     '''Go to the emergency room''',
 ])
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is vomiting''',
-    '''Is your child responsive?''',
-    '''yes''',
-    '''Does your kid present inconsolable crying, alternately pulling in and extending legs, arching back in pain?''',
-    '''no''',
-    '''Does his vomit look green, black, or red?''',
-    '''yes''',
-    '''Go to the emergency room
-    (try to bring a sample in a plastic bag)''',
-])
-trainer.train([
-    "Is your child breathing?",
-    '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is vomiting''',
-    '''Is your child responsive?''',
-    '''yes''',
-    '''Does your kid present inconsolable crying, alternately pulling in and extending legs, arching back in pain?''',
-    '''no''',
-    '''Does his vomit look green, black, or red?''',
-    '''no''',
-    '''Does he have a hard lump or swelling in abdomen that is painful when touched?''',
-    '''yes''',
-    '''Go to the emergency room''',
-])
-trainer.train([
-    "Is your child breathing?",
-    '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is vomiting''',
-    '''Is your child responsive?''',
-    '''yes''',
-    '''Does your kid present inconsolable crying, alternately pulling in and extending legs, arching back in pain?''',
-    '''no''',
-    '''Does his vomit look green, black, or red?''',
-    '''no''',
-    '''Does he have a hard lump or swelling in abdomen that is painful when touched?''',
-    '''no''',
-    '''Has your kid been vomiting more than once after a head injury?''',
-    '''yes''',
-    '''Go to the emergency room''',
-])
-trainer.train([
-    "Is your child breathing?",
-    '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''he is vomiting''',
-    '''Is your child responsive?''',
-    '''yes''',
-    '''Does your kid present inconsolable crying, alternately pulling in and extending legs, arching back in pain?''',
-    '''no''',
-    '''Does his vomit look green, black, or red?''',
-    '''no''',
-    '''Does he have a hard lump or swelling in abdomen that is painful when touched?''',
-    '''no''',
-    '''Has your kid been vomiting more than once after a head injury?''',
-    '''no''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''he is a child and is vomiting is conscious''',
     '''Ok, no need to panic however call the doctor if your baby has these symptoms:
 
     Vomiting for more than 24 hours
@@ -270,25 +138,9 @@ trainer.train([
 trainer.train([
     "Is your child breathing?",
     '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''has diarrhea''',
-    '''Is he responsive?''',
-    '''No''',
+    '''Don't worry explain his state (Include cause: bleeding, vomiting etc, infant or child, if he is concious or not, if he is turning blue and more details about the description.)''',
+    '''has diarrhea and is unconscious''',
     '''Call 911''',
-])
-trainer.train([
-    "Is your child breathing?",
-    '''yes''',
-    '''Don't worry I'm here to help you, what is his emergency?''',
-    '''has diarrhea''',
-    '''Is he responsive?''',
-    '''Yes''',
-    '''Don't worry no need to call 911, however call the doctor if your baby has these symptoms:
-
-    Baby younger than 3 months has diarrhea (stools that are suddenly more frequent and more watery than usual)
-    Diarrhea not improving after 24 hours
-    Six hours without a wet diaper, dry lips and mouth, crying without tears if he's more than 3 weeks old, unusual sleepiness, dark yellow urine, sunken fontanels (the soft spots on the head)
-    Black stool or blood in the stool''',
 ])
 trainer.train([
     "Is your child breathing?",
@@ -296,7 +148,7 @@ trainer.train([
     '''Don't worry I'm here to help you, what is his emergency?''',
     '''broke bone''',
     '''Is the bone is sticking out of the skin.?''',
-    '''Yes''',
+    '''It is sticking out of''',
     '''Call 911
     (Don't touch the bone. Cover it with a clean cloth.)''',
 ])
@@ -308,7 +160,7 @@ trainer.train([
     '''Is the bone is sticking out of the skin.?''',
     '''no''',
     '''May your child have a skull, neck, back, or pelvic fracture. '''
-    '''yes''',
+    '''He has a fracture''',
     '''Call 911 and don't move your child.''',
 ])
 trainer.train([
@@ -334,7 +186,7 @@ trainer.train([
     '''Don't worry I'm here to help you, what is his emergency?''',
     '''hit head fell down''',
     '''Is your child presenting irregular breathing, convulsions or seizure, or unconsciousness?''',
-    '''yes''',
+    '''he is breathing irregularly''',
     '''Call 911
      In the meantime:
 
@@ -368,7 +220,7 @@ trainer.train([
     '''Is your child turning blue around the mouth or taking more than 60 breaths per minute''',
     '''no''',
     '''Can you reach the doctor right away?''',
-    '''yes''',
+    '''I can reach a doctor right away.''',
     '''Call a doctor''',
 ])
 trainer.train([
@@ -394,7 +246,7 @@ trainer.train([
     Did the seizure last longer than 3 minutes?''',
     '''no''',
     '''Is your child turning blue around the mouth or taking more than 60 breaths per minute''',
-    '''yes''',
+    '''he is turning blue''',
     '''Call 911''',
 ])
 trainer.train([
@@ -404,7 +256,7 @@ trainer.train([
     '''seizure''',
     '''Turn your child on the side to prevent choking on saliva, and wipe saliva away from the mouth to keep the airway clear.
     Did the seizure last longer than 3 minutes?''',
-    '''yes''',
+    '''it lasted more than 3 minutes''',
     '''Call 911''',
 ])
 trainer.train([
@@ -413,7 +265,7 @@ trainer.train([
     '''Don't worry I'm here to help you, what is his emergency?''',
     '''trouble breathing''',
     '''Is your child turning blue around the mouth or taking more than 60 breaths per minute?''',
-    '''yes''',
+    '''he is turning blue''',
     '''Call 911''',
 ])
 trainer.train([
@@ -435,7 +287,7 @@ trainer.train([
     "Is your child breathing?",
     '''no''',
     '''Is your child less than 1 year old?''',
-    '''yes'''
+    '''my child is less than a year old'''
     '''Ask a bystander to call 911 and retrieve an AED. If there is no bystander, call 911 after delivering 2 minutes of care.
     Open the airway. With the child lying on his or her back, tilt the head back slightly and lift the chin.
     Deliver 2 rescue breaths if the child or infant isn't breathing. With the head tilted back slightly and the chin lifted, use your mouth to make a complete seal over the infant's mouth and nose, then blow in for one second to make the chest clearly rise. Now, deliver two rescue breaths.
@@ -449,13 +301,12 @@ trainer.train([
 
     Keep going. Continue the these baby or child CPR steps until you see obvious signs of life, like breathing, or until an AED is ready to use, another trained responder or EMS professional is available to take over, you're too exhausted to continue, or the scene becomes unsafe.
     ''',
-    
 ])
 trainer.train([
     "Is your child breathing?",
     '''no''',
     '''Is your child less than 1 year old?''',
-    '''no'''
+    '''my child is less than a year old'''
     '''Ask a bystander to call 911 and retrieve an AED. If there is no bystander, call 911 after delivering 2 minutes of care.
     Open the airway. With the child lying on his or her back, tilt the head back slightly and lift the chin.
     Deliver 2 rescue breaths if the child or infant isn't breathing. With the head tilted back slightly and the chin lifted, pinch the child's nose shut, make a complete seal by placing your mouth over the child's mouth and breathe into the child's mouth twice.
@@ -469,6 +320,5 @@ trainer.train([
 
     Keep going. Continue the these baby or child CPR steps until you see obvious signs of life, like breathing, or until an AED is ready to use, another trained responder or EMS professional is available to take over, you're too exhausted to continue, or the scene becomes unsafe.
     ''',
-    
 ])
 
