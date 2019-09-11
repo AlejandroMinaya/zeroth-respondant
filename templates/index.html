@@ -29,6 +29,9 @@
       .chat-content p{
         width: 100%;
       }
+      .conv-canvas{
+        overflow-y: scroll;
+      }
       p{
         margin-bottom: 0;
       }
@@ -42,14 +45,9 @@
     <main class="row d-flex justify-content-center">
       <div class="col-9">
         <div class="rounded conv-canvas p-2 mb-2 w-100 border border-secondary">
-          <div class="chat-entry user-input my-2">
-            <div class="chat-content p-2 rounded user-input-content bg-primary text-white">
-              <p>Lorem ipsum</p>
-            </div>
-          </div>
           <div class="chat-entry bot-output my-2">
             <div class="chat-content p-2 rounded bot-output-content bg-light">
-              <p>Lorem ipsum</p>
+              <p>Hi! I'm here to help. Is your baby breathing?</p>
             </div>
           </div>
         </div>
@@ -63,12 +61,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
-      $('#user_submit').on('click', function(ev){
+      var send_input = function(){
         var input = $('#user_input').val();
         if(input.length > 0){
-          $.post('/input/', {
-            input: input
-          });
+          $('#user_input').val("");
           $(".conv-canvas").append(`
           <div class="chat-entry user-input my-2">
             <div class="chat-content p-2 rounded user-input-content bg-primary text-white">
@@ -76,6 +72,24 @@
             </div>
           </div>
           `);
+          $.post('/input', {
+            input: input
+          }, (response) => {
+            $(".conv-canvas").append(`
+            <div class="chat-entry bot-output my-2">
+              <div class="chat-content p-2 rounded bot-output-content bg-light">
+                <p>${response}</p>
+              </div>
+            </div>
+            `);
+          });
+          $("#user_input").focus();
+        }
+      }
+      $('#user_submit').on('click', send_input);
+      $('#user_submit').on('keypress', function(e){
+        if(e.which == 13){
+          send_input()
         }
       });
     </script>
